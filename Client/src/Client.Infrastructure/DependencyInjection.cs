@@ -13,8 +13,7 @@ namespace Client.Infrastructure
         {
             services.AddDbContext<ClientContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(ClientContext).Assembly.FullName)
+                    configuration.GetConnectionString("DefaultConnection")
                 ));
 
             services.AddScoped<IClientRepository, ClientRepository>();
