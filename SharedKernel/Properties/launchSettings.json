@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SharedKernel": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

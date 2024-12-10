@@ -1,69 +1,49 @@
-version: '3.9'
+version: '3.8'
 
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     environment:
-      SA_PASSWORD: "Your_password123"
+      SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
     networks:
-      - microservices-network
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -Q \"SET NOCOUNT ON; SELECT TOP 1 1 FROM sys.databases\""]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+      - backend-network
 
-  account.api:
+  clientapi:
     build:
-      context: ./Account/src/Account.API
-      dockerfile: Dockerfile
-    container_name: account.api
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=AccountDb;User=sa;Password=Your_password123;TrustServerCertificate=True;
+      context: .
+      dockerfile: ./Client/src/Client.API/Dockerfile
+    image: clientapi
+    container_name: clientapi
     depends_on:
-      sqlserver:
-        condition: service_healthy
-    networks:
-      - microservices-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-
-  client.api:
-    build:
-      context: ./Client/src/Client.API
-      dockerfile: Dockerfile
-    container_name: client.api
-    ports:
-      - "8090:8080"
-      - "8091:8081"
+      - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ClientDb;User=sa;Password=Your_password123;TrustServerCertificate=True;
-    depends_on:
-      sqlserver:
-        condition: service_healthy
+    ports:
+      - "5001:80"
     networks:
-      - microservices-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+      - backend-network
+
+  accountapi:
+    build:
+      context: .
+      dockerfile: ./Account/src/Account.API/Dockerfile
+    image: accountapi
+    container_name: accountapi
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=AccountDb;User=sa;Password=Your_password123;TrustServerCertificate=True;
+    ports:
+      - "5002:80"
+    networks:
+      - backend-network
 
 networks:
-  microservices-network:
+  backend-network:
     driver: bridge
