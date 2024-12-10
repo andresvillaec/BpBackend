@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Account.Domain.Entities;
@@ -16,10 +17,12 @@ public class Account
 
     [Required]
     [Range(0.01, int.MaxValue, ErrorMessage = "El deposito inicial debe ser mayor a cero")]
+    [Precision(18, 2)]
     public decimal OpeningDeposit { get; set; }
 
     [Required]
     [Range(0.01, int.MaxValue, ErrorMessage = "El balance no puede ser negativo")]
+    [Precision(18, 2)]
     public decimal Balance { get; set; }
 
     public bool Status { get; set; }
