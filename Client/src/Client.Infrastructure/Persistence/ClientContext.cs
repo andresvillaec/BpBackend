@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Client.Application.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Client.Infrastructure.Persistence;
 
-public class ClientContext : DbContext
+public class ClientContext : DbContext, IApplicantionDbContext, IUnitOfWork
 {
     public ClientContext(DbContextOptions<ClientContext> options) : base(options) { }
 

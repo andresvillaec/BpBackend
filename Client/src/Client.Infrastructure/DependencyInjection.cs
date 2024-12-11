@@ -1,4 +1,5 @@
-﻿using Client.Domain.Interfaces;
+﻿using Client.Application.Data;
+using Client.Domain.Interfaces;
 using Client.Infrastructure.Persistence;
 using Client.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,12 @@ namespace Client.Infrastructure
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")
                 ));
+
+            services.AddScoped<IApplicantionDbContext>(sp =>
+                sp.GetRequiredService<ClientContext>());
+
+            services.AddScoped<IUnitOfWork>(sp =>
+                sp.GetRequiredService<ClientContext>());
 
             services.AddScoped<IClientRepository, ClientRepository>();
 
