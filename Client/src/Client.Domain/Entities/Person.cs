@@ -11,7 +11,7 @@ public class Person
         DocumentNumber = documentNumber;
     }
 
-    [StringLength(3, MinimumLength = 100)]
+    [StringLength(100, MinimumLength = 3)]
     public string? Name { get; set; } = string.Empty;
 
     public Genders? Gender { get; set; }

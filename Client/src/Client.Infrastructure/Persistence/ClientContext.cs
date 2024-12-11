@@ -19,5 +19,6 @@ public class ClientContext : DbContext, IApplicantionDbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientContext).Assembly);
+        base.OnModelCreating(modelBuilder);
     }
 }

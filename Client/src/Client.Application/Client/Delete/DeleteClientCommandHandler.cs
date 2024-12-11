@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Client.Application.Client.Delete;
 
-public class DeleteClientCommandHandler : IRequest<DeleteClientCommand>
+public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUnitOfWork _unitOfWork;
