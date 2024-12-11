@@ -33,4 +33,24 @@ public class Client : Person
 
     [Required]
     public bool Status { get; set; }
+
+    public void Update(string name,
+        Genders? gender,
+        int? age,
+        string documentNumber,
+        string address,
+        string phone,
+        string password,
+        bool status)
+    {
+        Name = name;
+        DocumentNumber = documentNumber;
+        Gender = gender;
+        Age = age;
+        Address = address;
+        Phone = phone;
+        Password = password;
+        Status = status;
+    }
+
 }
