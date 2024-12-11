@@ -39,7 +39,6 @@ public class ClientRepository : IClientRepository
         if (client != null)
         {
             _context.Clients.Remove(client);
-            await _context.SaveChangesAsync();
         }
     }
 }
