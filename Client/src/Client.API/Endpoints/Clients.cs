@@ -2,6 +2,7 @@
 using Client.Application.Client.Commands.Create;
 using Client.Application.Client.Commands.Delete;
 using Client.Application.Client.Commands.Update;
+using Client.Application.Client.Queries.Get;
 using Client.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,18 @@ public class Clients : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
+        app.MapGet("clients/{id:int}", async (int id, ISender sender) =>
+        {
+            try
+            {
+                return Results.Ok(await sender.Send(new GetClientQuery(id)));
+            }
+            catch (ClientNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
+        });
+
         app.MapPost("clients", async (CreateClientCommand command, ISender sender) =>
         {
             await sender.Send(command);
