@@ -1,6 +1,6 @@
 ﻿using Carter;
-using Client.Application.Client.Create;
-using Client.Application.Client.Delete;
+using Client.Application.Client.Commands.Create;
+using Client.Application.Client.Commands.Delete;
 using Client.Domain.Exceptions;
 using MediatR;
 

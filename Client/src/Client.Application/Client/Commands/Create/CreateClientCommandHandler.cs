@@ -2,7 +2,7 @@
 using Client.Domain.Interfaces;
 using MediatR;
 
-namespace Client.Application.Client.Create
+namespace Client.Application.Client.Commands.Create
 {
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand>
     {

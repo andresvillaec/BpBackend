@@ -3,7 +3,7 @@ using Client.Domain.Exceptions;
 using Client.Domain.Interfaces;
 using MediatR;
 
-namespace Client.Application.Client.Delete;
+namespace Client.Application.Client.Commands.Delete;
 
 public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
 {
