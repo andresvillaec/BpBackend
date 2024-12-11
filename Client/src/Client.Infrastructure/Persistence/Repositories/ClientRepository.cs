@@ -22,12 +22,9 @@ public class ClientRepository : IClientRepository
         return await _context.Clients.FindAsync(id);
     }
 
-    public async Task<Domain.Entities.Client> AddAsync(Domain.Entities.Client client)
+    public async Task AddAsync(Domain.Entities.Client client)
     {
         await _context.Clients.AddAsync(client);
-        await _context.SaveChangesAsync();
-
-        return client;
     }
 
     public async Task UpdateAsync(Domain.Entities.Client client)

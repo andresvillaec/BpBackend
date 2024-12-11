@@ -5,8 +5,14 @@ namespace Client.Domain.Entities;
 
 public class Person
 {
+    public Person(string name, string documentNumber)
+    {
+        Name = name;
+        DocumentNumber = documentNumber;
+    }
+
     [StringLength(3, MinimumLength = 100)]
-    public required string Name { get; set; }
+    public string? Name { get; set; } = string.Empty;
 
     public Genders? Gender { get; set; }
 
@@ -14,7 +20,7 @@ public class Person
 
     [Required]
     [StringLength(25, MinimumLength = 3)]
-    public required string DocumentNumber { get; set; }
+    public string? DocumentNumber { get; set; } = string.Empty;
 
     [StringLength(500, MinimumLength = 3)]
     public string? Address { get; set; }
