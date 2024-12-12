@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
 
-namespace Account.Application.UseCases.Movement.Commands.Create;
+namespace Account.Application.UseCases.Movement.Commands.Update;
 
-public sealed class CreateMovementValidator : AbstractValidator<CreateMovementCommand>
+public sealed class UpdateMovementValidator : AbstractValidator<UpdateMovementCommand>
 {
-    public CreateMovementValidator()
+    public UpdateMovementValidator()
     {
+        RuleFor(x => x.Id)
+            .NotNull()
+            .GreaterThan(0);
+
         RuleFor(x => x.Timestamp)
             .NotNull();
 

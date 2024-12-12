@@ -48,4 +48,19 @@ public class Movement
         Balance = balance;
         AccountNumber = accountNumber;
     }
+
+    public void Update(
+        DateTime timestamp,
+        AccountTypes accountType,
+        decimal amount,
+        decimal balance,
+        string accountNumber
+    )
+    {
+        Timestamp = timestamp;
+        AccountType = accountType;
+        Amount = amount;
+        Balance = balance;
+        AccountNumber = accountNumber;
+    }
 }

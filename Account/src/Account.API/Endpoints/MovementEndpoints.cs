@@ -1,11 +1,12 @@
-﻿using Account.Application.UseCases.BankAccount.Commands.Create;
-using Account.Application.UseCases.BankAccount.Commands.Delete;
+﻿using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Application.UseCases.Movement.Commands.Create;
 using Account.Application.UseCases.Movement.Commands.Delete;
+using Account.Application.UseCases.Movement.Commands.Update;
 using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.Endpoints;
 
@@ -32,6 +33,34 @@ public class MovementEndpoints : CarterModule
             return Results.Ok();
         });
 
+        app.MapPut("{id:int}", async (int id, [FromBody] UpdateMovementRequest payload, IValidator<UpdateMovementCommand> validator, ISender sender) =>
+        {
+            try
+            {
+                var command = new UpdateMovementCommand(
+                    id,
+                    payload.Timestamp,
+                    payload.AccountType,
+                    payload.Amount,
+                    payload.Balance,
+                    payload.AccountNumber
+                    );
+
+                var validationResult = await validator.ValidateAsync(command);
+                if (!validationResult.IsValid)
+                {
+                    return Results.ValidationProblem(validationResult.ToDictionary());
+                }
+
+                await sender.Send(command);
+                return Results.NoContent();
+            }
+            catch (MovementNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
+        });
+
         app.MapDelete("{id:int}", async (int id, ISender sender) =>
         {
             try
@@ -39,7 +68,7 @@ public class MovementEndpoints : CarterModule
                 await sender.Send(new DeleteMovementCommand(id));
                 return Results.NoContent();
             }
-            catch (AccountNotFoundException e)
+            catch (MovementNotFoundException e)
             {
                 return Results.NotFound(e.Message);
             }
