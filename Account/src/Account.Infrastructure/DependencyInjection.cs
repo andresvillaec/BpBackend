@@ -1,4 +1,5 @@
-﻿using Account.Domain.Interfaces;
+﻿using Account.Application.Data;
+using Account.Domain.Interfaces;
 using Account.Infrastructure.Persistence;
 using Account.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,12 @@ namespace Account.Infrastructure
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")
                 ));
+
+            services.AddScoped<IApplicantionDbContext>(sp =>
+               sp.GetRequiredService<AccountContext>());
+
+            services.AddScoped<IUnitOfWork>(sp =>
+                sp.GetRequiredService<AccountContext>());
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IMovementRepository, MovementRepository>();
