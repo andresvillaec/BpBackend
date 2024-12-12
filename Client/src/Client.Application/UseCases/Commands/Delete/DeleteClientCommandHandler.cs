@@ -3,9 +3,9 @@ using Client.Domain.Exceptions;
 using Client.Domain.Interfaces;
 using MediatR;
 
-namespace Client.Application.Client.Commands.Delete;
+namespace Client.Application.UseCases.Commands.Delete;
 
-public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
+public sealed class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUnitOfWork _unitOfWork;

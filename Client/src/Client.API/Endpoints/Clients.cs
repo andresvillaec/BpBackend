@@ -1,8 +1,8 @@
 ﻿using Carter;
-using Client.Application.Client.Commands.Create;
-using Client.Application.Client.Commands.Delete;
-using Client.Application.Client.Commands.Update;
-using Client.Application.Client.Queries.Get;
+using Client.Application.UseCases.Commands.Create;
+using Client.Application.UseCases.Commands.Delete;
+using Client.Application.UseCases.Commands.Update;
+using Client.Application.UseCases.Queries.Get;
 using Client.Domain.Exceptions;
 using FluentValidation;
 using MediatR;

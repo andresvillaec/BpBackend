@@ -1,4 +1,4 @@
-﻿using Client.Application.Client.Commands.Create;
+﻿using Client.Application.UseCases.Commands.Create;
 using FluentValidation;
 
 namespace Client.Application.Validator

@@ -1,7 +1,7 @@
 ﻿using Client.Domain.Enums;
 using MediatR;
 
-namespace Client.Application.Client.Commands.Update
+namespace Client.Application.UseCases.Commands.Update
 {
     public record UpdateClientCommand(
         int Id,
@@ -12,7 +12,7 @@ namespace Client.Application.Client.Commands.Update
         string Address,
         string Phone,
         string Password,
-        bool Status) 
+        bool Status)
         : IRequest;
 
 

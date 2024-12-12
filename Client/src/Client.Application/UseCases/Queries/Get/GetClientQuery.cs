@@ -1,9 +1,14 @@
 ﻿using Client.Domain.Enums;
 using MediatR;
 
-namespace Client.Application.Client.Commands.Create;
+namespace Client.Application.UseCases.Queries.Get;
 
-public record CreateClientCommand(
+public record GetClientQuery(int Id) : IRequest<ClientResponse>
+{
+}
+
+public record ClientResponse(
+    int Id,
     string Name,
     Genders? Gender,
     int? Age,
@@ -11,4 +16,5 @@ public record CreateClientCommand(
     string Address,
     string Phone,
     string Password,
-    bool Status) : IRequest;
+    bool Status
+    );
