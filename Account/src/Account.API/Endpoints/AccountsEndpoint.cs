@@ -1,6 +1,7 @@
 ﻿using Account.Application.UseCases.BankAccount.Commands.Create;
 using Account.Application.UseCases.BankAccount.Commands.Delete;
 using Account.Application.UseCases.BankAccount.Commands.Update;
+using Account.Application.UseCases.BankAccount.Queries.Get;
 using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
@@ -24,6 +25,18 @@ public class AccountsEndpoint : ICarterModule
             await sender.Send(command);
 
             return Results.Ok();
+        });
+
+        app.MapGet("accounts/{id:int}", async (int id, ISender sender) =>
+        {
+            try
+            {
+                return Results.Ok(await sender.Send(new GetAccountQuery(id)));
+            }
+            catch (AccountNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
         });
 
         app.MapPut("accounts/{id:int}", async (int id, [FromBody] UpdateAccountRequest payload, IValidator<UpdateAccountCommand> validator, ISender sender) =>
