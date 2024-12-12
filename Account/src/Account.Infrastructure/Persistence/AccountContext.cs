@@ -1,9 +1,10 @@
-﻿using Account.Domain.Entities;
+﻿using Account.Application.Data;
+using Account.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Infrastructure.Persistence;
 
-public class AccountContext : DbContext
+public class AccountContext : DbContext, IApplicantionDbContext, IUnitOfWork
 {
     public AccountContext(DbContextOptions<AccountContext> options) : base(options) { }
 
