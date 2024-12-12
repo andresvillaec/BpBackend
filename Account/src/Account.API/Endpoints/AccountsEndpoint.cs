@@ -1,4 +1,5 @@
 ﻿using Account.Application.UseCases.BankAccount.Commands.Create;
+using Account.Application.UseCases.BankAccount.Commands.Delete;
 using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Domain.Exceptions;
 using Carter;
@@ -45,6 +46,19 @@ public class AccountsEndpoint : ICarterModule
                 }
 
                 await sender.Send(command);
+                return Results.NoContent();
+            }
+            catch (AccountNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
+        });
+
+        app.MapDelete("accounts/{id:int}", async (int id, ISender sender) =>
+        {
+            try
+            {
+                await sender.Send(new DeleteAccountCommand(id));
                 return Results.NoContent();
             }
             catch (AccountNotFoundException e)
