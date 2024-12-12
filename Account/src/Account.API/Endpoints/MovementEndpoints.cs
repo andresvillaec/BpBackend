@@ -1,5 +1,8 @@
 ﻿using Account.Application.UseCases.BankAccount.Commands.Create;
+using Account.Application.UseCases.BankAccount.Commands.Delete;
 using Account.Application.UseCases.Movement.Commands.Create;
+using Account.Application.UseCases.Movement.Commands.Delete;
+using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
 using MediatR;
@@ -27,6 +30,19 @@ public class MovementEndpoints : CarterModule
             await sender.Send(command);
 
             return Results.Ok();
+        });
+
+        app.MapDelete("{id:int}", async (int id, ISender sender) =>
+        {
+            try
+            {
+                await sender.Send(new DeleteMovementCommand(id));
+                return Results.NoContent();
+            }
+            catch (AccountNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
         });
     }
 }
