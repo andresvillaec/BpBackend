@@ -4,6 +4,7 @@ using Client.Application.Client.Commands.Delete;
 using Client.Application.Client.Commands.Update;
 using Client.Application.Client.Queries.Get;
 using Client.Domain.Exceptions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,8 +26,14 @@ public class Clients : ICarterModule
             }
         });
 
-        app.MapPost("clients", async (CreateClientCommand command, ISender sender) =>
+        app.MapPost("clients", async (CreateClientCommand command, IValidator<CreateClientCommand> validator, ISender sender) =>
         {
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+
             await sender.Send(command);
 
             return Results.Ok();
