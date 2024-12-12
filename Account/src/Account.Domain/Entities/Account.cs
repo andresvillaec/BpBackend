@@ -48,4 +48,18 @@ public class Account
     {
         Status = true;
     }
+
+    public void Update(
+        string number,
+        decimal openingDeposit,
+        decimal balance,
+        bool status,
+        int clientId)
+    {
+        Number = number;
+        OpeningDeposit = openingDeposit;
+        Balance = balance;
+        Status = status;
+        ClientId = clientId;
+    }
 }
