@@ -33,4 +33,19 @@ public class Movement
     {
         Timestamp = DateTime.UtcNow;
     }
+
+    public Movement(
+        DateTime timestamp,
+        AccountTypes accountType,
+        decimal amount,
+        decimal balance,
+        string accountNumber
+    )
+    {
+        Timestamp = timestamp;
+        AccountType = accountType;
+        Amount = amount;
+        Balance = balance;
+        AccountNumber = accountNumber;
+    }
 }
