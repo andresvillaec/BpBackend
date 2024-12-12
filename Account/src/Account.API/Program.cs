@@ -3,6 +3,7 @@ using Account.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+SerilogConfig.ConfigureSerilog(builder);
 
 // Add application and infrastructure services
 builder.Services.AddInfrastructure(builder.Configuration);
