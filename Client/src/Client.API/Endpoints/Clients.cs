@@ -7,6 +7,8 @@ using Client.Domain.Exceptions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.ComponentModel.DataAnnotations;
 
 namespace Client.API.Endpoints;
 
@@ -52,7 +54,7 @@ public class Clients : ICarterModule
             }
         });
 
-        app.MapPut("clients/{id:int}", async (int id, [FromBody] UpdateClientRequest payload, ISender sender) =>
+        app.MapPut("clients/{id:int}", async (int id, [FromBody] UpdateClientRequest payload, IValidator<UpdateClientCommand> validator, ISender sender) =>
         {
             try
             {
@@ -67,6 +69,12 @@ public class Clients : ICarterModule
                     payload.Password,
                     payload.Status
                     );
+
+                var validationResult = await validator.ValidateAsync(command);
+                if (!validationResult.IsValid)
+                {
+                    return Results.ValidationProblem(validationResult.ToDictionary());
+                }
 
                 await sender.Send(command);
                 return Results.NoContent();

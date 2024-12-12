@@ -1,4 +1,5 @@
-﻿using Client.Application.Validator;
+﻿using Client.Application.UseCases.Commands.Create;
+using Client.Application.UseCases.Commands.Update;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR.NotificationPublishers;
@@ -17,7 +18,8 @@ public static class DependencyInjection
         });
 
         services.AddFluentValidationAutoValidation();
-        services.AddValidatorsFromAssemblyContaining<CreateClientCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateClientValidator>();
+        services.AddValidatorsFromAssemblyContaining<UpdateClientValidator>();
 
         return services;
     }
