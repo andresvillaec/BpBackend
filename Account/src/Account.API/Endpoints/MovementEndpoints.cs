@@ -1,7 +1,7 @@
-﻿using Account.Application.UseCases.BankAccount.Commands.Update;
-using Account.Application.UseCases.Movement.Commands.Create;
+﻿using Account.Application.UseCases.Movement.Commands.Create;
 using Account.Application.UseCases.Movement.Commands.Delete;
 using Account.Application.UseCases.Movement.Commands.Update;
+using Account.Application.UseCases.Movement.Queries.Get;
 using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
@@ -13,9 +13,8 @@ namespace Account.API.Endpoints;
 public class MovementEndpoints : CarterModule
 {
     public MovementEndpoints()
-        :base("/api/movements")
+        : base("/api/movements")
     {
-        
     }
 
     public override void AddRoutes(IEndpointRouteBuilder app)
@@ -31,6 +30,18 @@ public class MovementEndpoints : CarterModule
             await sender.Send(command);
 
             return Results.Ok();
+        });
+
+        app.MapGet("{id:int}", async (int id, ISender sender) =>
+        {
+            try
+            {
+                return Results.Ok(await sender.Send(new GetMovementQuery(id)));
+            }
+            catch (MovementNotFoundException e)
+            {
+                return Results.NotFound(e.Message);
+            }
         });
 
         app.MapPut("{id:int}", async (int id, [FromBody] UpdateMovementRequest payload, IValidator<UpdateMovementCommand> validator, ISender sender) =>
