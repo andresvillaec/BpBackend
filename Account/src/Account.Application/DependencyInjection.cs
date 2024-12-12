@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Account.Application.UseCases.BankAccount.Commands.Create;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR.NotificationPublishers;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public static class DependencyInjection
         });
 
         services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<CreateAccountValidator>();
 
         return services;
     }

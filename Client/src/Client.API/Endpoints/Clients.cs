@@ -7,8 +7,6 @@ using Client.Domain.Exceptions;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.ComponentModel.DataAnnotations;
 
 namespace Client.API.Endpoints;
 

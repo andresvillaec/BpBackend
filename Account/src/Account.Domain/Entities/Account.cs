@@ -6,6 +6,20 @@ namespace Account.Domain.Entities;
 
 public class Account
 {
+    public Account(
+        string number,
+        decimal openingDeposit,
+        decimal balance,
+        bool status,
+        int clientId)
+    {
+        Number = number;
+        OpeningDeposit = openingDeposit;
+        Balance = balance;
+        Status = status;
+        ClientId = clientId;
+    }
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
