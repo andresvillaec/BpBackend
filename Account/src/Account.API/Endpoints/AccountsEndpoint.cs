@@ -10,11 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.Endpoints;
 
-public class AccountsEndpoint : ICarterModule
+public class AccountsEndpoint : CarterModule
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public AccountsEndpoint()
+        :base("/api/accounts")
     {
-        app.MapPost("accounts", async (CreateAccountCommand command, IValidator<CreateAccountCommand> validator, ISender sender) =>
+
+    }
+
+    public override void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("", async (CreateAccountCommand command, IValidator<CreateAccountCommand> validator, ISender sender) =>
         {
             var validationResult = await validator.ValidateAsync(command);
             if (!validationResult.IsValid)
@@ -27,7 +33,7 @@ public class AccountsEndpoint : ICarterModule
             return Results.Ok();
         });
 
-        app.MapGet("accounts/{id:int}", async (int id, ISender sender) =>
+        app.MapGet("{id:int}", async (int id, ISender sender) =>
         {
             try
             {
@@ -39,7 +45,7 @@ public class AccountsEndpoint : ICarterModule
             }
         });
 
-        app.MapPut("accounts/{id:int}", async (int id, [FromBody] UpdateAccountRequest payload, IValidator<UpdateAccountCommand> validator, ISender sender) =>
+        app.MapPut("{id:int}", async (int id, [FromBody] UpdateAccountRequest payload, IValidator<UpdateAccountCommand> validator, ISender sender) =>
         {
             try
             {
@@ -67,7 +73,7 @@ public class AccountsEndpoint : ICarterModule
             }
         });
 
-        app.MapDelete("accounts/{id:int}", async (int id, ISender sender) =>
+        app.MapDelete("{id:int}", async (int id, ISender sender) =>
         {
             try
             {
