@@ -1,7 +1,5 @@
 ﻿using Account.Application.Data;
-using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Application.UseCases.BankAccount.Queries.Get;
-using Account.Application.UseCases.Movement.Queries.Get;
 using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
 using MediatR;

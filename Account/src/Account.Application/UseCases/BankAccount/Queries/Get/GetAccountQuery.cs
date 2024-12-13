@@ -10,7 +10,7 @@ public record GetAccountQuery(int Id) : IRequest<AccountResponse>
 public record AccountResponse(
     int Id,
     string Number,
-    AccountTypes AccountTypes,
+    AccountTypes AccountType,
     decimal OpeningDeposit,
     decimal Balance,
     bool Status,
