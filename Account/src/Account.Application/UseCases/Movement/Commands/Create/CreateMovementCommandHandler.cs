@@ -1,4 +1,5 @@
 ﻿using Account.Application.Data;
+using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
 using MediatR;
 
@@ -24,6 +25,11 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
         var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber);
         decimal currentBalance = account.Balance;
         decimal newBalance = currentBalance + command.Amount;
+
+        if (newBalance < 0)
+        {
+            throw new NoFundsAvailable();
+        }
 
         Domain.Entities.Movement movement = new(
             command.Amount,
