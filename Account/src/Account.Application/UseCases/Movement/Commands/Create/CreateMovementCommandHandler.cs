@@ -1,11 +1,12 @@
 ﻿using Account.Application.Data;
+using Account.Application.UseCases.Movement.Queries.Get;
 using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
 using MediatR;
 
 namespace Account.Application.UseCases.Movement.Commands.Create;
 
-public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovementCommand>
+public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovementCommand, MovementResponse>
 {
     private readonly IMovementRepository _movementRepository;
     private readonly IAccountRepository _accountRepository;
@@ -20,7 +21,7 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
         _accountRepository = accountRepository;
     }
 
-    public async Task Handle(CreateMovementCommand command, CancellationToken cancellationToken)
+    public async Task<MovementResponse> Handle(CreateMovementCommand command, CancellationToken cancellationToken)
     {
         await _unitOfWork.BeginTransactionAsync();
 
@@ -47,6 +48,14 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
             await _accountRepository.UpdateAsync(account);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             await _unitOfWork.CommitTransactionAsync();
+
+            return new MovementResponse(
+                movement.Id,
+                movement.Account.Number
+,
+                movement.Amount,
+                movement.Balance,
+                movement.Timestamp);
         }
         catch
         {

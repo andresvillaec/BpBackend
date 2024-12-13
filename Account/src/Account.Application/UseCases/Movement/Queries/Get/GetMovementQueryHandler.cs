@@ -21,11 +21,11 @@ internal sealed class GetMovementQueryHandler : IRequestHandler<GetMovementQuery
             .Where(c => c.Id == request.Id)
             .Select(p => new MovementResponse(
                 p.Id,
-                p.Timestamp,
+                p.Account.Number
+,
                 p.Amount,
                 p.Balance,
-                p.Account.Number
-                )
+                p.Timestamp)
             ).FirstOrDefaultAsync();
 
         if (movement == null)

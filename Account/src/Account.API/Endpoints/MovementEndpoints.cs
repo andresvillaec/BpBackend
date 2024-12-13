@@ -26,9 +26,9 @@ public class MovementEndpoints : CarterModule
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            await sender.Send(command);
+            var response = await sender.Send(command);
 
-            return Results.Created();
+            return Results.Ok(response);
         });
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>

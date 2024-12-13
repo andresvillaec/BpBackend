@@ -1,5 +1,4 @@
-﻿using Account.Domain.Enums;
-using MediatR;
+﻿using MediatR;
 
 namespace Account.Application.UseCases.Movement.Queries.Get;
 
@@ -9,8 +8,7 @@ public record GetMovementQuery(int Id) : IRequest<MovementResponse>
 
 public record MovementResponse(
     int Id,
-    DateTime Timestamp,
+    string AccountNumber,
     decimal Amount,
     decimal Balance,
-    string AccountNumber
-);
+    DateTime Timestamp);
