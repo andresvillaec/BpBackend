@@ -22,7 +22,7 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
 
     public async Task Handle(CreateMovementCommand command, CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber);
+        var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber) ?? throw new AccountNotFoundException(command.AccountNumber);
         decimal currentBalance = account.Balance;
         decimal newBalance = currentBalance + command.Amount;
 

@@ -1,3 +1,4 @@
+using Account.API.Middleware;
 using Account.Application;
 using Account.Infrastructure;
 using Account.Infrastructure.Persistence;
@@ -32,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.MapCarter();
-
 app.Run();
