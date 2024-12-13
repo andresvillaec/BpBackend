@@ -22,25 +22,36 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
 
     public async Task Handle(CreateMovementCommand command, CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber) ?? throw new AccountNotFoundException(command.AccountNumber);
-        decimal currentBalance = account.Balance;
-        decimal newBalance = currentBalance + command.Amount;
+        await _unitOfWork.BeginTransactionAsync();
 
-        if (newBalance < 0)
+        try
         {
-            throw new NoFundsAvailable();
+            var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber) ?? throw new AccountNotFoundException(command.AccountNumber);
+            decimal currentBalance = account.Balance;
+            decimal newBalance = currentBalance + command.Amount;
+
+            if (newBalance < 0)
+            {
+                throw new NoFundsAvailable();
+            }
+
+            Domain.Entities.Movement movement = new(
+                command.Amount,
+                newBalance,
+                account.Id
+                );
+
+            account.UpdateBalance(command.Amount);
+
+            await _movementRepository.AddAsync(movement);
+            await _accountRepository.UpdateAsync(account);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync();
         }
-
-        Domain.Entities.Movement movement = new(
-            command.Amount,
-            newBalance,
-            account.Id
-            );
-
-        account.UpdateBalance(command.Amount);
-
-        await _movementRepository.AddAsync(movement);
-        await _accountRepository.UpdateAsync(account);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        catch
+        {
+            await _unitOfWork.RollbackTransactionAsync();
+            throw;
+        }
     }
 }
