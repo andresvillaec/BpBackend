@@ -35,56 +35,35 @@ public class AccountsEndpoint : CarterModule
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>
         {
-            try
-            {
-                return Results.Ok(await sender.Send(new GetAccountQuery(id)));
-            }
-            catch (AccountNotFoundException e)
-            {
-                return Results.NotFound(e.Message);
-            }
+            return Results.Ok(await sender.Send(new GetAccountQuery(id)));
         });
 
         app.MapPut("{id:int}", async (int id, [FromBody] UpdateAccountRequest payload, IValidator<UpdateAccountCommand> validator, ISender sender) =>
         {
-            try
-            {
-                var command = new UpdateAccountCommand(
-                    id,
-                    payload.Number,
-                    payload.AccountType,
-                    payload.OpeningDeposit,
-                    payload.Balance,
-                    payload.Status,
-                    payload.ClientId
-                    );
+            var command = new UpdateAccountCommand(
+                id,
+                payload.Number,
+                payload.AccountType,
+                payload.OpeningDeposit,
+                payload.Balance,
+                payload.Status,
+                payload.ClientId
+                );
 
-                var validationResult = await validator.ValidateAsync(command);
-                if (!validationResult.IsValid)
-                {
-                    return Results.ValidationProblem(validationResult.ToDictionary());
-                }
-
-                await sender.Send(command);
-                return Results.NoContent();
-            }
-            catch (AccountNotFoundException e)
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
             {
-                return Results.NotFound(e.Message);
+                return Results.ValidationProblem(validationResult.ToDictionary());
             }
+
+            await sender.Send(command);
+            return Results.NoContent();
         });
 
         app.MapDelete("{id:int}", async (int id, ISender sender) =>
         {
-            try
-            {
-                await sender.Send(new DeleteAccountCommand(id));
-                return Results.NoContent();
-            }
-            catch (AccountNotFoundException e)
-            {
-                return Results.NotFound(e.Message);
-            }
+            await sender.Send(new DeleteAccountCommand(id));
+            return Results.NoContent();
         });
     }
 }
