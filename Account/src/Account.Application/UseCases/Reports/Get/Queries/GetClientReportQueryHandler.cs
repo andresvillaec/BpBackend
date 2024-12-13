@@ -17,11 +17,12 @@ internal sealed class GetClientReportQueryHandler : IRequestHandler<GetClientRep
     public async Task<List<ReportResponse>> Handle(GetClientReportQuery request, CancellationToken cancellationToken)
     {
         return await _context.Movements
-             .Where(FilterReport(request)) // Filter by ClientId
-             .GroupBy(a => a.Account.Number) // Group by AccountNumber
+             .Where(FilterReport(request))
+             .GroupBy(a => a.Account.Number)
              .Select(group =>
                  new ReportResponse(
                     group.Key,
+                    group.Select(m => m.Account.Balance).FirstOrDefault(),
                     group.Select(movement =>
                         new MovementItemResponse(
                                 movement.Amount,
