@@ -27,7 +27,6 @@ internal sealed class GetClientQueryHandler : IRequestHandler<GetClientQuery, Cl
                 p.DocumentNumber,
                 p.Address,
                 p.Phone,
-                p.Password,
                 p.Status
                     )
             ).FirstOrDefaultAsync();

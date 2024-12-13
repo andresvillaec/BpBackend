@@ -15,6 +15,5 @@ public record ClientResponse(
     string DocumentNumber,
     string Address,
     string Phone,
-    string Password,
     bool Status
     );

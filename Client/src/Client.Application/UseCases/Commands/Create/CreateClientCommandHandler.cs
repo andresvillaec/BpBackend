@@ -24,8 +24,7 @@ public sealed class CreateClientCommandHandler : IRequestHandler<CreateClientCom
             command.DocumentNumber,
             command.Address,
             command.Phone,
-            command.Password,
-            command.Status
+            command.Password
             );
 
         await _clientRepository.AddAsync(client);

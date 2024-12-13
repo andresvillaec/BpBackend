@@ -8,24 +8,20 @@ public sealed class UpdateClientValidator : AbstractValidator<UpdateClientComman
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(100)
-            .WithMessage("El nombre no puede ser mayor a 100 caracteres");
+            .MaximumLength(100);
 
         RuleFor(x => x.Gender)
             .NotEmpty()
-            .IsInEnum()
-            .WithMessage("El género no existe");
+            .IsInEnum();
 
         RuleFor(x => x.Age)
             .GreaterThan(0)
-            .LessThanOrEqualTo(160)
-            .WithMessage("Rango de edad invalido");
+            .LessThanOrEqualTo(160);
 
         RuleFor(x => x.DocumentNumber)
             .NotEmpty()
             .MinimumLength(3)
-            .MaximumLength(25)
-            .Matches("^[a-zA-Z0-9]*$").WithMessage("Formato incorrecto de número de documento");
+            .MaximumLength(25);
 
         RuleFor(x => x.Address)
             .NotEmpty()
@@ -43,6 +39,6 @@ public sealed class UpdateClientValidator : AbstractValidator<UpdateClientComman
            .MaximumLength(25);
 
         RuleFor(x => x.Status)
-           .NotEmpty();
+           .NotNull();
     }
 }

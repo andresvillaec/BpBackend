@@ -10,5 +10,5 @@ public record CreateClientCommand(
     string DocumentNumber,
     string Address,
     string Phone,
-    string Password,
-    bool Status) : IRequest;
+    string Password
+    ) : IRequest;

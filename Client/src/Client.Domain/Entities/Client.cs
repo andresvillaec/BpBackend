@@ -12,15 +12,15 @@ public class Client : Person
         string documentNumber,
         string address,
         string phone,
-        string password,
-        bool status) : base(name, documentNumber)
+        string password
+        ) : base(name, documentNumber)
     {
         Gender = gender;
         Age = age;
         Address = address;
         Phone = phone;
         Password = password;
-        Status = status;
+        Status = true;
     }
 
     [Key]
@@ -52,5 +52,4 @@ public class Client : Person
         Password = password;
         Status = status;
     }
-
 }
