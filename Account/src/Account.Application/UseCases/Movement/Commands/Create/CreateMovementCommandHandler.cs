@@ -28,19 +28,14 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
         try
         {
             var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber) ?? throw new AccountNotFoundException(command.AccountNumber);
-            decimal currentBalance = account.Balance;
-            decimal newBalance = currentBalance + command.Amount;
+            decimal newBalance = account.Balance + command.Amount;
 
             if (newBalance < 0)
             {
                 throw new NoFundsAvailable();
             }
 
-            Domain.Entities.Movement movement = new(
-                command.Amount,
-                newBalance,
-                account.Id
-                );
+            Domain.Entities.Movement movement = new(command.Amount, newBalance, account.Id);
 
             account.UpdateBalance(command.Amount);
 
@@ -51,8 +46,7 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
 
             return new MovementResponse(
                 movement.Id,
-                movement.Account.Number
-,
+                movement.Account.Number,
                 movement.Amount,
                 movement.Balance,
                 movement.Timestamp);

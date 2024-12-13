@@ -11,8 +11,10 @@ namespace Account.API.Endpoints;
 
 public class MovementEndpoints : CarterModule
 {
+    private const string BasePath = "/api/movements";
+
     public MovementEndpoints()
-        : base("/api/movements")
+        : base(BasePath)
     {
     }
 
@@ -28,7 +30,7 @@ public class MovementEndpoints : CarterModule
 
             var response = await sender.Send(command);
 
-            return Results.Ok(response);
+            return Results.Created($"{BasePath}/{response.Id}", response);
         });
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>
@@ -37,13 +39,11 @@ public class MovementEndpoints : CarterModule
             return Results.Ok(response);
         });
 
-        app.MapPut("{id:int}", async (int id, [FromBody] UpdateMovementRequest payload, IValidator<UpdateMovementCommand> validator, ISender sender) =>
+        app.MapPut("{id:int}", async (int id, [FromBody] UpdateMovementRequest payload, 
+            IValidator<UpdateMovementCommand> validator, 
+            ISender sender) =>
         {
-            var command = new UpdateMovementCommand(
-                id,
-                payload.Amount,
-                payload.AccountNumber);
-
+            var command = new UpdateMovementCommand(id, payload.Amount, payload.AccountNumber);
             var validationResult = await validator.ValidateAsync(command);
             if (!validationResult.IsValid)
             {
