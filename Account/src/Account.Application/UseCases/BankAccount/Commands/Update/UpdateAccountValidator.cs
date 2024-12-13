@@ -10,6 +10,10 @@ public sealed class UpdateAccountValidator : AbstractValidator<UpdateAccountComm
             .NotEmpty()
             .MaximumLength(25);
 
+        RuleFor(x => x.AccountType)
+            .NotEmpty()
+            .IsInEnum();
+
         RuleFor(x => x.OpeningDeposit)
             .GreaterThan(0);
 

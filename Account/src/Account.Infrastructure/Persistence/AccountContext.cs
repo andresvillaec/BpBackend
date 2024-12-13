@@ -18,5 +18,11 @@ public class AccountContext : DbContext, IApplicantionDbContext, IUnitOfWork
         modelBuilder.Entity<Domain.Entities.Account>()
             .HasIndex(a => a.Number)
             .IsUnique();
+
+        modelBuilder.Entity<Domain.Entities.Account>()
+        .HasMany(e => e.Movements)
+        .WithOne(e => e.Account)
+        .HasForeignKey(e => e.AccountId)
+        .HasPrincipalKey(e => e.Id);
     }
 }

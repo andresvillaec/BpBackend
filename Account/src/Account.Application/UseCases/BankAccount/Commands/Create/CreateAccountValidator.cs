@@ -16,6 +16,10 @@ public sealed class CreateAccountValidator : AbstractValidator<CreateAccountComm
         RuleFor(x => x.Balance)
             .GreaterThan(0);
 
+        RuleFor(x => x.AccountType)
+            .NotEmpty()
+            .IsInEnum();
+
         RuleFor(x => x.ClientId)
             .NotEmpty()
             .GreaterThan(0);

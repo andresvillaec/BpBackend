@@ -18,7 +18,7 @@ public class ReportRepository : IReportRepository
         var start = startDate.Date;
         var end = endDate.Date.AddDays(1).AddSeconds(-1);
         return await _context.Movements
-            .Where(m => m.AccountNumber == accountNumber && m.Timestamp >= start && m.Timestamp <= end)
+            .Where(m => m.Account.Number == accountNumber && m.Timestamp >= start && m.Timestamp <= end)
             .ToListAsync();
     }
 }

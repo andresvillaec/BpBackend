@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Account.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,12 +9,14 @@ public class Account
 {
     public Account(
         string number,
+        AccountTypes accountTypes,
         decimal openingDeposit,
         decimal balance,
         bool status,
-        int clientId)
+        int clientId) : this()
     {
         Number = number;
+        AccountType = accountTypes;
         OpeningDeposit = openingDeposit;
         Balance = balance;
         Status = status;
@@ -23,6 +26,9 @@ public class Account
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+
+    [Required]
+    public AccountTypes AccountType { get; set; }
 
     [Required]
     [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Unicamente números y letras están permitidos")]
@@ -44,6 +50,8 @@ public class Account
     [Required]
     public int ClientId { get; set; }
 
+    public ICollection<Movement> Movements { get; set; }
+
     public Account()
     {
         Status = true;
@@ -51,12 +59,14 @@ public class Account
 
     public void Update(
         string number,
+        AccountTypes accountTypes,
         decimal openingDeposit,
         decimal balance,
         bool status,
         int clientId)
     {
         Number = number;
+        AccountType = accountTypes;
         OpeningDeposit = openingDeposit;
         Balance = balance;
         Status = status;

@@ -22,6 +22,7 @@ internal sealed class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, 
             .Select(p => new AccountResponse(
                 p.Id,
                 p.Number,
+                p.AccountType,
                 p.OpeningDeposit,
                 p.Balance,
                 p.Status,

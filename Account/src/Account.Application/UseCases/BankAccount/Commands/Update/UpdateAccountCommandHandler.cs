@@ -26,6 +26,7 @@ public sealed class UpdateAccountCommandHandler : IRequestHandler<UpdateAccountC
 
         account.Update(
             command.Number,
+            command.AccountType,
             command.OpeningDeposit,
             command.Balance,
             command.Status,

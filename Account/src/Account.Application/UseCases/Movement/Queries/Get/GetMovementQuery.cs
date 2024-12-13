@@ -10,7 +10,6 @@ public record GetMovementQuery(int Id) : IRequest<MovementResponse>
 public record MovementResponse(
     int Id,
     DateTime Timestamp,
-    AccountTypes AccountType,
     decimal Amount,
     decimal Balance,
     string AccountNumber

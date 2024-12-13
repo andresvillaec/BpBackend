@@ -18,6 +18,8 @@ public sealed class UpdateMovementCommandHandler : IRequestHandler<UpdateMovemen
 
     public async Task Handle(UpdateMovementCommand command, CancellationToken cancellationToken)
     {
+        //TODO: Implement it
+        decimal newBalance = 0;
         var movement = await _movementRepository.GetByIdAsync(command.Id);
         if (movement == null)
         {
@@ -25,11 +27,8 @@ public sealed class UpdateMovementCommandHandler : IRequestHandler<UpdateMovemen
         }
 
         movement.Update(
-            command.Timestamp,
-            command.AccountType,
             command.Amount,
-            command.Balance,
-            command.AccountNumber
+            newBalance
             );
 
         await _movementRepository.UpdateAsync(movement);

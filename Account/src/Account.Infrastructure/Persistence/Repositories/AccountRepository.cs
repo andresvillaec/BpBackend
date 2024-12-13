@@ -36,11 +36,6 @@ public class AccountRepository : IAccountRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task UpdatePartialAsync(Domain.Entities.Account account)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task DeleteAsync(int id)
     {
         var account = await _context.Accounts.FindAsync(id);
@@ -49,5 +44,19 @@ public class AccountRepository : IAccountRepository
             _context.Accounts.Remove(account);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<decimal> GetBalance(string accountNumber)
+    {
+        return await _context.Accounts
+            .Where(a => a.Number == accountNumber)
+            .Select(a => a.Balance)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Domain.Entities.Account> GetByAccountNumberAsync(string accountNumber)
+    {
+        return await _context.Accounts
+            .FirstOrDefaultAsync(a => a.Number == accountNumber);
     }
 }

@@ -50,10 +50,7 @@ public class MovementEndpoints : CarterModule
             {
                 var command = new UpdateMovementCommand(
                     id,
-                    payload.Timestamp,
-                    payload.AccountType,
                     payload.Amount,
-                    payload.Balance,
                     payload.AccountNumber
                     );
 

@@ -48,13 +48,6 @@ public class MovementRepository : IMovementRepository
         }
     }
 
-    public async Task<decimal> SumMovements(string accountNumber, int movementId)
-    {
-        return await _context.Movements
-            .Where(m => m.AccountNumber == accountNumber && m.Id != movementId)
-            .SumAsync(m => m.Amount);
-    }
-
     public async Task<decimal> GetOpeningDeposit(string accountNumber)
     {
         return await _context.Accounts
@@ -66,10 +59,5 @@ public class MovementRepository : IMovementRepository
     private Expression<Func<Domain.Entities.Account, bool>> FilterAccountByNumber(string accountNumber)
     {
         return m => m.Number == accountNumber;
-    }
-
-    private Expression<Func<Movement, bool>> FilterMovementsByAccountNumber(string accountNumber)
-    {
-        return m => m.AccountNumber == accountNumber;
     }
 }

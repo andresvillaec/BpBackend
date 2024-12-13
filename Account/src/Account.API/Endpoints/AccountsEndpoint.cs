@@ -52,6 +52,7 @@ public class AccountsEndpoint : CarterModule
                 var command = new UpdateAccountCommand(
                     id,
                     payload.Number,
+                    payload.AccountType,
                     payload.OpeningDeposit,
                     payload.Balance,
                     payload.Status,

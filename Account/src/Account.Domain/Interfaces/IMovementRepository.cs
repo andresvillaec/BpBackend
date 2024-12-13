@@ -9,6 +9,5 @@ public interface IMovementRepository
     Task<Movement> AddAsync(Movement movement);
     Task UpdateAsync(Movement movement);
     Task DeleteAsync(int id);
-    Task<decimal> SumMovements(string accountNumber, int movementId);
     Task<decimal> GetOpeningDeposit(string accountNumber);
 }

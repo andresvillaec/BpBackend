@@ -30,6 +30,9 @@ namespace Account.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Balance")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -65,12 +68,7 @@ namespace Account.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<int>("AccountType")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
@@ -86,7 +84,25 @@ namespace Account.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
                     b.ToTable("Movements");
+                });
+
+            modelBuilder.Entity("Account.Domain.Entities.Movement", b =>
+                {
+                    b.HasOne("Account.Domain.Entities.Account", "Account")
+                        .WithMany("Movements")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Account.Domain.Entities.Account", b =>
+                {
+                    b.Navigation("Movements");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,6 +19,7 @@ public sealed class CreateAccountCommandHandler : IRequestHandler<CreateAccountC
     {
         Domain.Entities.Account account = new(
             command.Number,
+            command.AccountType,
             command.OpeningDeposit,
             command.Balance,
             command.Status,

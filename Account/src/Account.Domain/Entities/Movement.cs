@@ -1,5 +1,4 @@
-﻿using Account.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,9 +13,6 @@ public class Movement
     [Required]
     public DateTime Timestamp { get; private set; }
 
-    [Required]
-    public AccountTypes AccountType { get; set; }
-
     [Precision(18, 2)]
     public decimal Amount { get; set; }
 
@@ -25,42 +21,29 @@ public class Movement
     [Precision(18, 2)]
     public decimal Balance { get; set; }
 
-    [Required]
-    [StringLength(25, MinimumLength = 5)]
-    public string AccountNumber { get; set; }
+    public int AccountId { get; set; }
 
-    public Movement()
-    {
-        Timestamp = DateTime.UtcNow;
-    }
+    public Account Account { get; set; }
 
     public Movement(
-        DateTime timestamp,
-        AccountTypes accountType,
         decimal amount,
         decimal balance,
-        string accountNumber
+        int accountId
     )
     {
-        Timestamp = timestamp;
-        AccountType = accountType;
+        Timestamp = DateTime.Now;
         Amount = amount;
         Balance = balance;
-        AccountNumber = accountNumber;
+        AccountId = accountId;
     }
 
     public void Update(
-        DateTime timestamp,
-        AccountTypes accountType,
         decimal amount,
-        decimal balance,
-        string accountNumber
+        decimal balance
     )
     {
-        Timestamp = timestamp;
-        AccountType = accountType;
+        Timestamp = DateTime.Now;
         Amount = amount;
         Balance = balance;
-        AccountNumber = accountNumber;
     }
 }
