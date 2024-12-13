@@ -2,6 +2,7 @@
 using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Application.UseCases.Movement.Commands.Create;
 using Account.Application.UseCases.Movement.Commands.Update;
+using Account.Application.UseCases.Reports.Get.Queries;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR.NotificationPublishers;
@@ -26,6 +27,8 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssemblyContaining<CreateMovementValidator>();
         services.AddValidatorsFromAssemblyContaining<UpdateMovementValidator>();
+
+        services.AddValidatorsFromAssemblyContaining<GetClientReportValidator>();
 
         return services;
     }

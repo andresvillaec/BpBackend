@@ -1,7 +1,7 @@
 ﻿using Account.Application.UseCases.Reports.Get.Queries;
 using Carter;
+using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.Endpoints;
 
@@ -17,12 +17,21 @@ public class ReportEndpoints : CarterModule
 
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("", async (int clientId, DateTime startDate, DateTime endDate, ISender sender) =>
+        app.MapGet("", async (int clientId, 
+            DateTime startDate, 
+            DateTime endDate,
+            IValidator <GetClientReportQuery> validator,
+            ISender sender
+            ) =>
         {
-            var report = await sender.Send(new GetClientReportQuery(
-                clientId,
-                startDate,
-                endDate));
+            var command = new GetClientReportQuery(clientId, startDate, endDate);
+
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
+            {
+                return Results.ValidationProblem(validationResult.ToDictionary());
+            }
+            var report = await sender.Send(command);
 
             return Results.Ok(report);
         });
