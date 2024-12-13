@@ -1,5 +1,6 @@
 ﻿using Account.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Account.Infrastructure.Persistence.Repositories;
 
@@ -49,14 +50,23 @@ public class AccountRepository : IAccountRepository
     public async Task<decimal> GetBalance(string accountNumber)
     {
         return await _context.Accounts
-            .Where(a => a.Number == accountNumber)
+            .Where(MatchAccountNumber(accountNumber))
             .Select(a => a.Balance)
             .FirstOrDefaultAsync();
     }
 
     public async Task<Domain.Entities.Account> GetByAccountNumberAsync(string accountNumber)
     {
-        return await _context.Accounts
-            .FirstOrDefaultAsync(a => a.Number == accountNumber);
+        return await _context.Accounts.FirstOrDefaultAsync(MatchAccountNumber(accountNumber));
+    }
+
+    public async Task<bool> ExistsAccountNumber(string accountNumber)
+    {
+        return await _context.Accounts.AnyAsync(MatchAccountNumber(accountNumber));
+    }
+
+    private Expression<Func<Domain.Entities.Account, bool>> MatchAccountNumber(string accountNumber)
+    {
+        return a => a.Number == accountNumber;
     }
 }

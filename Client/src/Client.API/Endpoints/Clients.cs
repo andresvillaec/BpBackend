@@ -36,7 +36,7 @@ public class Clients : ICarterModule
 
             await sender.Send(command);
 
-            return Results.Ok();
+            return Results.Created();
         });
 
         app.MapDelete("clients/{id:int}", async (int id, ISender sender) =>

@@ -8,7 +8,7 @@ public class AccountNotFoundException : Exception
     }
 
     public AccountNotFoundException(string accountNumber)
-        : base($"La número de cuenta {accountNumber} no existe")
+        : base($"El número de cuenta {accountNumber} no existe")
     {
     }
 }

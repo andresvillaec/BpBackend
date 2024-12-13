@@ -30,7 +30,7 @@ public class AccountsEndpoint : CarterModule
 
             await sender.Send(command);
 
-            return Results.Ok();
+            return Results.Created();
         });
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>

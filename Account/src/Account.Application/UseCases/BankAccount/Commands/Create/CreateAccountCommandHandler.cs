@@ -1,4 +1,5 @@
 ﻿using Account.Application.Data;
+using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
 using MediatR;
 
@@ -17,6 +18,12 @@ public sealed class CreateAccountCommandHandler : IRequestHandler<CreateAccountC
 
     public async Task Handle(CreateAccountCommand command, CancellationToken cancellationToken)
     {
+        bool isDuplicatedAccountNumber = await _accountRepository.ExistsAccountNumber(command.Number);
+        if (isDuplicatedAccountNumber)
+        {
+            throw new DuplicatedAccountException(command.Number);
+        }
+
         Domain.Entities.Account account = new(
             command.Number,
             command.AccountType,

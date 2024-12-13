@@ -34,6 +34,7 @@ public class ExceptionMiddleware
             AccountNotFoundException notFoundException => CreateErrorDetails(HttpStatusCode.BadRequest, notFoundException.Message),
             MovementNotFoundException movementNotFoundException => CreateErrorDetails(HttpStatusCode.BadRequest, movementNotFoundException.Message),
             NoFundsAvailable noFundsAvailable => CreateErrorDetails(HttpStatusCode.BadRequest, noFundsAvailable.Message),
+            DuplicatedAccountException duplicatedAccount => CreateErrorDetails(HttpStatusCode.BadRequest, duplicatedAccount.Message),
             DbUpdateException dbUpdateException => CreateErrorDetails(HttpStatusCode.BadRequest, DatabaseError),
             Exception baseException => CreateErrorDetails(HttpStatusCode.BadRequest, baseException.Message),
             _ => CreateErrorDetails(HttpStatusCode.BadRequest,ServerError)

@@ -9,5 +9,6 @@
         Task UpdateAsync(Entities.Account account);
         Task DeleteAsync(int id);
         Task<decimal> GetBalance(string accountNumber);
+        Task<bool> ExistsAccountNumber(string accountNumber);
     }
 }
