@@ -11,8 +11,10 @@ namespace Client.API.Endpoints;
 
 public class ClientsEndpoint : CarterModule
 {
+    private const string BasePath = "/api/clients";
+
     public ClientsEndpoint()
-        : base("/api/clients")
+        : base(BasePath)
     {
     }
 
@@ -31,9 +33,8 @@ public class ClientsEndpoint : CarterModule
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            await sender.Send(command);
-
-            return Results.Created();
+            var response = await sender.Send(command);
+            return Results.Created($"{BasePath}/{response.Id}", response);
         });
 
         app.MapDelete("{id:int}", async (int id, ISender sender) =>

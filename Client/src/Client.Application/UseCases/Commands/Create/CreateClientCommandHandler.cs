@@ -1,10 +1,11 @@
 ﻿using Client.Application.Data;
+using Client.Application.UseCases.Queries.Get;
 using Client.Domain.Interfaces;
 using MediatR;
 
 namespace Client.Application.UseCases.Commands.Create;
 
-public sealed class CreateClientCommandHandler : IRequestHandler<CreateClientCommand>
+public sealed class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, ClientResponse>
 {
     private readonly IClientRepository _clientRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +16,7 @@ public sealed class CreateClientCommandHandler : IRequestHandler<CreateClientCom
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(CreateClientCommand command, CancellationToken cancellationToken)
+    public async Task<ClientResponse> Handle(CreateClientCommand command, CancellationToken cancellationToken)
     {
         Domain.Entities.Client client = new(
             command.Name,
@@ -29,5 +30,15 @@ public sealed class CreateClientCommandHandler : IRequestHandler<CreateClientCom
 
         await _clientRepository.AddAsync(client);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return new ClientResponse(
+                client.Id,
+                client.Name,
+                client.Gender,
+                client.Age,
+                client.DocumentNumber,
+                client.Address,
+                client.Phone,
+                client.Status);
     }
 }
