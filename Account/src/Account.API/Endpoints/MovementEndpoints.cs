@@ -34,39 +34,26 @@ public class MovementEndpoints : CarterModule
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>
         {
-            try
-            {
-                return Results.Ok(await sender.Send(new GetMovementQuery(id)));
-            }
-            catch (MovementNotFoundException e)
-            {
-                return Results.NotFound(e.Message);
-            }
+            var response = await sender.Send(new GetMovementQuery(id));
+            return Results.Ok(response);
         });
 
         app.MapPut("{id:int}", async (int id, [FromBody] UpdateMovementRequest payload, IValidator<UpdateMovementCommand> validator, ISender sender) =>
         {
-            try
-            {
-                var command = new UpdateMovementCommand(
-                    id,
-                    payload.Amount,
-                    payload.AccountNumber
-                    );
+            var command = new UpdateMovementCommand(
+                id,
+                payload.Amount,
+                payload.AccountNumber
+                );
 
-                var validationResult = await validator.ValidateAsync(command);
-                if (!validationResult.IsValid)
-                {
-                    return Results.ValidationProblem(validationResult.ToDictionary());
-                }
-
-                await sender.Send(command);
-                return Results.NoContent();
-            }
-            catch (MovementNotFoundException e)
+            var validationResult = await validator.ValidateAsync(command);
+            if (!validationResult.IsValid)
             {
-                return Results.NotFound(e.Message);
+                return Results.ValidationProblem(validationResult.ToDictionary());
             }
+
+            await sender.Send(command);
+            return Results.NoContent();
         });
 
         app.MapDelete("{id:int}", async (int id, ISender sender) =>

@@ -1,12 +1,13 @@
 ﻿using Account.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Text.Json;
 
 namespace Account.API.Middleware;
 
 public class ExceptionMiddleware
 {
+    private const string DatabaseError = "Error en la base de datos, vuelva a intentar";
+    private const string ServerError = "Error en el servidor, vuelva a intentar";
     private readonly RequestDelegate _next;
 
     public ExceptionMiddleware(RequestDelegate next)
@@ -28,62 +29,26 @@ public class ExceptionMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/json";
-
-        var statusCode = (int)HttpStatusCode.InternalServerError;
-        var result = new
+        var response = exception switch
         {
-            Message = "Error en el servidor, vuelva a intentar"
+            AccountNotFoundException notFoundException => CreateErrorDetails(HttpStatusCode.BadRequest, notFoundException.Message),
+            MovementNotFoundException movementNotFoundException => CreateErrorDetails(HttpStatusCode.BadRequest, movementNotFoundException.Message),
+            NoFundsAvailable noFundsAvailable => CreateErrorDetails(HttpStatusCode.BadRequest, noFundsAvailable.Message),
+            DbUpdateException dbUpdateException => CreateErrorDetails(HttpStatusCode.BadRequest, DatabaseError),
+            Exception baseException => CreateErrorDetails(HttpStatusCode.BadRequest, baseException.Message),
+            _ => CreateErrorDetails(HttpStatusCode.BadRequest,ServerError)
         };
 
-        if (exception is AccountNotFoundException notFoundException)
-        {
-            statusCode = (int)HttpStatusCode.BadRequest;
-            result = new
-            {
-                notFoundException.Message
-            };
-        }
-
-        if (exception is MovementNotFoundException movementNotFoundException)
-        {
-            statusCode = (int)HttpStatusCode.BadRequest;
-            result = new
-            {
-                movementNotFoundException.Message
-            };
-        }
-
-        if (exception is NoFundsAvailable noFundsAvailable)
-        {
-            statusCode = (int)HttpStatusCode.BadRequest;
-            result = new
-            {
-                noFundsAvailable.Message
-            };
-        }
-
-        if (exception is DbUpdateException dbUpdateException)
-        {
-            statusCode = (int)HttpStatusCode.BadRequest;
-            result = new
-            {
-                dbUpdateException.Message
-            };
-        }
-
-        if (exception is Exception e)
-        {
-            statusCode = (int)HttpStatusCode.BadRequest;
-            result = new
-            {
-                e.Message
-            };
-        }
-
-        context.Response.StatusCode = statusCode;
-
-        // Serialize the response
-        return context.Response.WriteAsync(JsonSerializer.Serialize(result));
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = response.statusCode;
+        return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
     }
+
+    private static HttpCustomResponse CreateErrorDetails(HttpStatusCode statusCode, string message) 
+        => new HttpCustomResponse((int)statusCode, statusCode.ToString(), message);
+
+    private record HttpCustomResponse(
+        int statusCode, 
+        string statusCodeDescription, 
+        string message);
 }
