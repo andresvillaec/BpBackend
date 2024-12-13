@@ -2,7 +2,6 @@
 using Account.Application.UseCases.BankAccount.Commands.Delete;
 using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Application.UseCases.BankAccount.Queries.Get;
-using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
 using MediatR;

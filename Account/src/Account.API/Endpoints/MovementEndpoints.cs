@@ -2,7 +2,6 @@
 using Account.Application.UseCases.Movement.Commands.Delete;
 using Account.Application.UseCases.Movement.Commands.Update;
 using Account.Application.UseCases.Movement.Queries.Get;
-using Account.Domain.Exceptions;
 using Carter;
 using FluentValidation;
 using MediatR;
@@ -43,8 +42,7 @@ public class MovementEndpoints : CarterModule
             var command = new UpdateMovementCommand(
                 id,
                 payload.Amount,
-                payload.AccountNumber
-                );
+                payload.AccountNumber);
 
             var validationResult = await validator.ValidateAsync(command);
             if (!validationResult.IsValid)
@@ -58,15 +56,8 @@ public class MovementEndpoints : CarterModule
 
         app.MapDelete("{id:int}", async (int id, ISender sender) =>
         {
-            try
-            {
-                await sender.Send(new DeleteMovementCommand(id));
-                return Results.NoContent();
-            }
-            catch (MovementNotFoundException e)
-            {
-                return Results.NotFound(e.Message);
-            }
+            await sender.Send(new DeleteMovementCommand(id));
+            return Results.NoContent();
         });
     }
 }
