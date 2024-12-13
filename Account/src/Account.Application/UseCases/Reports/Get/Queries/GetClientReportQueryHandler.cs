@@ -23,7 +23,7 @@ internal sealed class GetClientReportQueryHandler : IRequestHandler<GetClientRep
                  new ReportResponse(
                     group.Key,
                     group.Select(m => m.Account.Balance).FirstOrDefault(),
-                    group.Select(movement =>
+                    group.OrderDescending().Select(movement =>
                         new MovementItemResponse(
                                 movement.Amount,
                                 movement.Balance,
