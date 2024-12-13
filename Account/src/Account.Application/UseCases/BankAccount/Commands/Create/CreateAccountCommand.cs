@@ -1,4 +1,6 @@
-﻿using Account.Domain.Enums;
+﻿using Account.Application.UseCases.BankAccount.Commands.Update;
+using Account.Application.UseCases.BankAccount.Queries.Get;
+using Account.Domain.Enums;
 using MediatR;
 
 namespace Account.Application.UseCases.BankAccount.Commands.Create
@@ -8,7 +10,6 @@ namespace Account.Application.UseCases.BankAccount.Commands.Create
         AccountTypes AccountType,
         decimal OpeningDeposit,
         decimal Balance,
-        bool Status,
         int ClientId
-    ) : IRequest;
+    ) : IRequest<AccountResponse>;
 }

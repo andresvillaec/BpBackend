@@ -21,8 +21,7 @@ internal sealed class GetMovementQueryHandler : IRequestHandler<GetMovementQuery
             .Where(c => c.Id == request.Id)
             .Select(p => new MovementResponse(
                 p.Id,
-                p.Account.Number
-,
+                p.Account.Number,
                 p.Amount,
                 p.Balance,
                 p.Timestamp)

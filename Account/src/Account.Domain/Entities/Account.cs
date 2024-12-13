@@ -12,14 +12,13 @@ public class Account
         AccountTypes accountTypes,
         decimal openingDeposit,
         decimal balance,
-        bool status,
         int clientId) : this()
     {
         Number = number;
         AccountType = accountTypes;
         OpeningDeposit = openingDeposit;
         Balance = balance;
-        Status = status;
+        Status = true;
         ClientId = clientId;
     }
 

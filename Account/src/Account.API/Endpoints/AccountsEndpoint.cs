@@ -11,8 +11,10 @@ namespace Account.API.Endpoints;
 
 public class AccountsEndpoint : CarterModule
 {
+    private const string BasePath = "/api/accounts";
+
     public AccountsEndpoint()
-        :base("/api/accounts")
+        :base(BasePath)
     {
 
     }
@@ -27,9 +29,9 @@ public class AccountsEndpoint : CarterModule
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            await sender.Send(command);
+            var response = await sender.Send(command);
 
-            return Results.Created();
+            return Results.Created($"{BasePath}/{response.Id}", response);
         });
 
         app.MapGet("{id:int}", async (int id, ISender sender) =>
