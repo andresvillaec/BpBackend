@@ -31,7 +31,10 @@ public sealed class CreateMovementCommandHandler : IRequestHandler<CreateMovemen
             account.Id
             );
 
+        account.UpdateBalance(command.Amount);
+
         await _movementRepository.AddAsync(movement);
+        await _accountRepository.UpdateAsync(account);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

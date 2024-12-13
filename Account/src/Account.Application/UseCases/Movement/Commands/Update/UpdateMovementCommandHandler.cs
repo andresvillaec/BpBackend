@@ -22,25 +22,17 @@ public sealed class UpdateMovementCommandHandler : IRequestHandler<UpdateMovemen
 
     public async Task Handle(UpdateMovementCommand command, CancellationToken cancellationToken)
     {
-        var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber);
-        if (account == null)
-        {
-            throw new AccountNotFoundException(command.Id);
-        }
+        var account = await _accountRepository.GetByAccountNumberAsync(command.AccountNumber) ?? throw new AccountNotFoundException(command.Id);
+        var movement = await _movementRepository.GetByIdAsync(command.Id) ?? throw new MovementNotFoundException(command.Id);
 
-        var movement = await _movementRepository.GetByIdAsync(command.Id);
-        if (movement == null)
-        {
-            throw new MovementNotFoundException(command.Id);
-        }
+        decimal newMovementAmount = command.Amount - movement.Amount;
+        decimal newBalance = movement.Balance + newMovementAmount;
+        movement.Update(command.Amount, newBalance);
 
-        decimal newBalance = movement.Balance - movement.Amount + command.Amount;
-        movement.Update(
-            command.Amount,
-            newBalance
-            );
+        account.UpdateBalance(newMovementAmount);
 
         await _movementRepository.UpdateAsync(movement);
+        await _accountRepository.UpdateAsync(account);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

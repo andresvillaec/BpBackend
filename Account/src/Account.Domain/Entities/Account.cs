@@ -72,4 +72,9 @@ public class Account
         Status = status;
         ClientId = clientId;
     }
+
+    public void UpdateBalance(decimal newMovementAmount)
+    {
+        Balance += newMovementAmount;
+    }
 }
