@@ -66,5 +66,12 @@ public class ClientsEndpoint : CarterModule
             await sender.Send(command);
             return Results.NoContent();
         });
+
+        app.MapGet("exists/{id:int}", async (int id, ISender sender) =>
+        {
+            var client = await sender.Send(new GetClientQuery(id));
+            bool exists = client != null && client.Status;
+            return Results.Ok(exists);
+        });
     }
 }

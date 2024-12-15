@@ -1,4 +1,5 @@
-﻿using Account.Application.UseCases.BankAccount.Commands.Create;
+﻿using Account.Application.Handlers;
+using Account.Application.UseCases.BankAccount.Commands.Create;
 using Account.Application.UseCases.BankAccount.Commands.Update;
 using Account.Application.UseCases.Movement.Commands.Create;
 using Account.Application.UseCases.Movement.Commands.Update;
@@ -21,6 +22,8 @@ public static class DependencyInjection
             config.NotificationPublisher = new TaskWhenAllPublisher();
         });
 
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateAccountCommandHandler).Assembly));
+
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateAccountValidator>();
         services.AddValidatorsFromAssemblyContaining<UpdateAccountValidator>();
@@ -29,6 +32,8 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblyContaining<UpdateMovementValidator>();
 
         services.AddValidatorsFromAssemblyContaining<GetClientReportValidator>();
+
+        services.AddHttpClient<ClientExistsQueryHandler>();
 
         return services;
     }

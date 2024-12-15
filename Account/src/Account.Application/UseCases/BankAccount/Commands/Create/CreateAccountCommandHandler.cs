@@ -1,4 +1,5 @@
 ﻿using Account.Application.Data;
+using Account.Application.Handlers;
 using Account.Application.UseCases.BankAccount.Queries.Get;
 using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
@@ -10,15 +11,24 @@ public sealed class CreateAccountCommandHandler : IRequestHandler<CreateAccountC
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
 
-    public CreateAccountCommandHandler(IAccountRepository accountRepository, IUnitOfWork unitOfWork)
+    public CreateAccountCommandHandler(IAccountRepository accountRepository, IUnitOfWork unitOfWork, IMediator mediator)
     {
         _accountRepository = accountRepository;
         _unitOfWork = unitOfWork;
+        _mediator = mediator;
     }
 
     public async Task<AccountResponse> Handle(CreateAccountCommand command, CancellationToken cancellationToken)
     {
+        var clientExists = await _mediator.Send(new ClientExistsQuery(command.ClientId), cancellationToken);
+
+        if (!clientExists)
+        {
+            throw new InvalidOperationException($"Client with ID {command.ClientId} does not exist.");
+        }
+
         bool isDuplicatedAccountNumber = await _accountRepository.ExistsAccountNumber(command.Number);
         if (isDuplicatedAccountNumber)
         {

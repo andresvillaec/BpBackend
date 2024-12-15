@@ -1,5 +1,4 @@
-﻿using Account.Application.UseCases.BankAccount.Commands.Update;
-using Account.Application.UseCases.BankAccount.Queries.Get;
+﻿using Account.Application.UseCases.BankAccount.Queries.Get;
 using Account.Domain.Enums;
 using MediatR;
 

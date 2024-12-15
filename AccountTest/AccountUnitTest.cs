@@ -1,7 +1,9 @@
 using Account.Application.Data;
+using Account.Application.Handlers;
 using Account.Application.UseCases.BankAccount.Commands.Create;
 using Account.Domain.Exceptions;
 using Account.Domain.Interfaces;
+using MediatR;
 using Moq;
 
 namespace AccountTest
@@ -11,6 +13,7 @@ namespace AccountTest
     {
         private Mock<IAccountRepository> _accountRepositoryMock;
         private Mock<IUnitOfWork> _unitOfWorkMock;
+        private Mock<IMediator> _mediator;
         private CreateAccountCommandHandler _handler;
 
         [TestInitialize]
@@ -18,7 +21,8 @@ namespace AccountTest
         {
             _accountRepositoryMock = new Mock<IAccountRepository>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _handler = new CreateAccountCommandHandler(_accountRepositoryMock.Object, _unitOfWorkMock.Object);
+            _mediator = new Mock<IMediator>();
+            _handler = new CreateAccountCommandHandler(_accountRepositoryMock.Object, _unitOfWorkMock.Object, _mediator.Object);
         }
 
         [TestMethod]
@@ -32,6 +36,10 @@ namespace AccountTest
                 1000m,
                 1
             );
+
+            _mediator
+                .Setup(m => m.Send(It.IsAny<ClientExistsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             _accountRepositoryMock
                 .Setup(repo => repo.ExistsAccountNumber(It.IsAny<string>()))
@@ -67,6 +75,10 @@ namespace AccountTest
                 1000m,
                 1
             );
+
+            _mediator
+                .Setup(m => m.Send(It.IsAny<ClientExistsQuery>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             _accountRepositoryMock
                 .Setup(repo => repo.ExistsAccountNumber(It.IsAny<string>()))
