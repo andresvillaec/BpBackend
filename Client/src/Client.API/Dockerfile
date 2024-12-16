@@ -8,15 +8,11 @@ COPY Client/src/Client.Application/Client.Application.csproj ./Client/src/Client
 COPY Client/src/Client.Domain/Client.Domain.csproj ./Client/src/Client.Domain/
 COPY Client/src/Client.Infrastructure/Client.Infrastructure.csproj ./Client/src/Client.Infrastructure/
 
-# If SharedKernel is used, copy its project file
-COPY SharedKernel/SharedKernel.csproj ./SharedKernel/
-
 # Restore dependencies
 RUN dotnet restore ./Client/src/Client.API/Client.API.csproj
 
 # Copy the entire source code
 COPY Client/ ./Client/
-COPY SharedKernel/ ./SharedKernel/
 
 # Build and publish the application
 WORKDIR /source/Client/src/Client.API

@@ -8,15 +8,12 @@ COPY Account/src/Account.Application/Account.Application.csproj ./Account/src/Ac
 COPY Account/src/Account.Domain/Account.Domain.csproj ./Account/src/Account.Domain/
 COPY Account/src/Account.Infrastructure/Account.Infrastructure.csproj ./Account/src/Account.Infrastructure/
 
-# If SharedKernel is used, copy its project file
-COPY SharedKernel/SharedKernel.csproj ./SharedKernel/
 
 # Restore dependencies
 RUN dotnet restore ./Account/src/Account.API/Account.API.csproj
 
 # Copy the entire source code
 COPY Account/ ./Account/
-COPY SharedKernel/ ./SharedKernel/
 
 # Build and publish the application
 WORKDIR /source/Account/src/Account.API
