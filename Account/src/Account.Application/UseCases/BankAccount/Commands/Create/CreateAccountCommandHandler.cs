@@ -22,7 +22,15 @@ public sealed class CreateAccountCommandHandler : IRequestHandler<CreateAccountC
 
     public async Task<AccountResponse> Handle(CreateAccountCommand command, CancellationToken cancellationToken)
     {
-        var clientExists = await _mediator.Send(new ClientExistsQuery(command.ClientId), cancellationToken);
+        bool clientExists = true;
+        try
+        {
+            clientExists = await _mediator.Send(new ClientExistsQuery(command.ClientId), cancellationToken);
+        }
+        catch (Exception)
+        {
+            //No validate if the services get errors
+        }
 
         if (!clientExists)
         {
